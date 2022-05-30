@@ -5,7 +5,7 @@
       <input v-model="killassist" placeholder="キルアシスト数">
       <input v-model="teamkill" placeholder="チームキル数">
       <input v-model="ranking" placeholder="順位">
-      <button @click="addData()">試合結果を保存する</button>
+      <v-btn @click="addData()">試合結果を保存する</v-btn>
     </div>
 
     <div>
@@ -15,7 +15,7 @@
     <ul>
       <li v-for="(apexdata,index) in apexdatas" :key="apexdata.id">
         {{ apexdatas.length-index }}試合目　{{ apexdata.damage }} {{ apexdata.killassist }} {{ apexdata.teamkill }} {{ apexdata.ranking }}
-        <button @click='minusSum(apexdata);deleteData(apexdata.id)'>削除</button>
+        <v-btn @click='deleteData(apexdata.id)'>削除</v-btn>
       </li>
     </ul>
   </div>
