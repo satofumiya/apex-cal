@@ -1,0 +1,1 @@
+json.array! @apexdatas, :damage, :killassist, :teamkill, :ranking, :id
