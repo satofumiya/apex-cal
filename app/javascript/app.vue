@@ -1,24 +1,82 @@
 <template>
-  <div id="app">
+  <v-app>
     <div>
-      <input v-model="damage" placeholder="ダメージ">
-      <input v-model="killassist" placeholder="キルアシスト数">
-      <input v-model="teamkill" placeholder="チームキル数">
-      <input v-model="ranking" placeholder="順位">
-      <v-btn @click="addData()">試合結果を保存する</v-btn>
+      <v-app-bar elevation="4">
+        <v-toolbar-title>ApexData</v-toolbar-title>
+      </v-app-bar>
+    </div>
+    <v-main>
+      <v-container>
+        <h1 class='pt-16'>{{ index }}試合目</h1>
+      <v-row justify="center" align-content="center">
+        <v-col>
+          <v-text-field  v-model.number="damage" placeholder="ダメージ"/>
+        </v-col>
+        <v-col>
+          <v-text-field v-model.number="killassist" placeholder="キルアシスト数"/>
+        </v-col>
+        <v-col>
+          <v-text-field v-model.number="teamkill" placeholder="チームキル数"/>
+        </v-col>
+        <v-col>
+          <v-text-field v-model.number="ranking" placeholder="順位"/>
+        </v-col>
+      </v-row>
+        <v-row justify="end">
+            <v-btn  @click="addData()">試合結果を保存する</v-btn> 
+        </v-row>
+    
+
+    <div class='py-8'>
+      <v-row justify="center">
+        <p class="pr-16">平均ダメージ　: {{ averageD }}</p>
+        <p>平均順位　: {{ averageR }}</p>
+      </v-row>
     </div>
 
-    <div>
-      <p>平均ダメージ　:</p>{{ averageD }}
-    </div>
+    <v-simple-table dense>
+      <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-left">
+            試合番号
+          </th>
+          <th class="text-left">
+            ダメージ数
+          </th>
+          <th class="text-left">
+            キル、アシスト数
+          </th>
+          <th class="text-left">
+            チームキル数
+          </th>
+          <th class="text-left">
+            順位
+          </th>
+          <th class="text-left">
+            削除ボタン
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          v-for="(apexdata, index) in apexdatas"
+          :key="apexdata.id"
+        >
+          <td>{{ apexdatas.length - index }}試合目</td>
+          <td>{{ apexdata.damage }}</td>
+          <td>{{ apexdata.killassist }}</td>
+          <td>{{ apexdata.teamkill }}</td>
+          <td>{{ apexdata.ranking }}</td>
+          <td><v-btn @click='deleteData(apexdata.id)'>削除</v-btn></td>
+        </tr>
+      </tbody>
+    </template>
+    </v-simple-table>
 
-    <ul>
-      <li v-for="(apexdata,index) in apexdatas" :key="apexdata.id">
-        {{ apexdatas.length-index }}試合目　{{ apexdata.damage }} {{ apexdata.killassist }} {{ apexdata.teamkill }} {{ apexdata.ranking }}
-        <v-btn @click='deleteData(apexdata.id)'>削除</v-btn>
-      </li>
-    </ul>
-  </div>
+    </v-container>
+    </v-main>    
+  </v-app>
 </template>
 
 <script>
@@ -27,12 +85,14 @@ export default {
   data: function () {
     return {
       apexdatas: "apexdatas",
+      index: "",
       damage: '',
       killassist: '',
       teamkill: '',
       ranking: '',
       sum: '',
       averageD: 0,
+      averageR: 0
     }
   },
   mounted () {
@@ -41,12 +101,23 @@ export default {
   computed: {
     averageDamage: function(){
       let List = this.apexdatas
-      let total = 0;
-      for(let i=0;i <  List.length; i++){
-        total += List[i].damage
-      }
-      return this.averageD = total/List.length
+      let totalDamageNum = 0;
+        for(let i=0;i <  List.length; i++){
+          totalDamageNum += List[i].damage
+        }
+      return totalDamageNum == 0 ? this.averageD = 0:this.averageD = totalDamageNum/List.length
     },
+    averageRank: function(){
+      let List = this.apexdatas
+      let totalRankNum = 0;
+      for(let i=0;i <  List.length; i++){
+          totalRankNum += List[i].ranking
+      }
+      return totalRankNum == 0 ? this.averageR = 0: this. averageR = totalRankNum/List.length
+    },
+    gameIndex: function(){
+      return this.index = this.apexdatas.length+1;
+    }
   },
   methods: {
   setData: function() {
@@ -80,8 +151,6 @@ export default {
   
   },
 }
-
-
 </script>
 
 <style scoped>
