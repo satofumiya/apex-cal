@@ -105,7 +105,7 @@ export default {
         for(let i=0;i <  List.length; i++){
           totalDamageNum += List[i].damage
         }
-      return totalDamageNum == 0 ? this.averageD = 0:this.averageD = totalDamageNum/List.length
+      return this.$set(this.averageD,totalDamageNum == 0 ? this.averageD = 0:this.averageD = totalDamageNum/List.length)
     },
     averageRank: function(){
       let List = this.apexdatas
